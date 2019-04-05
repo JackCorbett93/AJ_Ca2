@@ -85,6 +85,7 @@ class Team_Play extends Component {
           name={t.name}
           fname={t.last_name}
           hometown={t.hometown}
+          role={t.role}
           players={player}
           image={img}
         />

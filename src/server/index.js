@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 const mongo_uri =
-  "mongodb+srv://Jaaack:Wolwol100@ca2-luszh.mongodb.net/ca2?retryWrites=true";
+  "mongodb+srv://Jaaack:FHaQzgJ8FzMUUQ3F@ca2-luszh.mongodb.net/ca2?retryWrites=true";
 //"mongodb://localhost/ca2";
 mongoose.connect(
   mongo_uri,
