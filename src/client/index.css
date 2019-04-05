@@ -1,0 +1,72 @@
+body {
+  background-color: #F0F0F0;
+  padding: 20px;
+  margin: 0;
+}
+h1, h2, p, ul, li {
+  font-family: sans-serif;
+}
+ul.header li {
+  display: inline;
+  list-style-type: none;
+  margin: 0;
+}
+ul.header {
+  background-color: #111;
+  padding: 0;
+}
+ul.header li a {
+  color: #FFF;
+  font-weight: bold;
+  text-decoration: none;
+  padding: 20px;
+  display: inline-block;
+}
+.content {
+  background-color: #F0F0F0;
+  padding: 20px;
+}
+.content h2 {
+  padding: 0;
+  margin: 0;
+}
+.content li {
+  margin-bottom: 10px;
+}
+.active {
+  background-color: #0099FF;
+}
+/* .card-img {
+  width: 50%;
+  height: 50%;
+  margin-left: 25%;
+} */
+.timg {
+  width: 70%;
+  margin-left: 15%;
+}
+.pimg{
+
+}
+.tcard{
+  min-width: 235.75px;
+  min-height: 386px;
+  max-height: 386px;
+}
+.pcard{
+  min-height: 433.33px;
+}
+.mtimg{
+  width: 75%;
+  height: 75%;
+  margin-left: 8%;
+}
+.tname{
+  text-align: center;
+  font-weight: bold;
+  font-size: 23px;
+}
+input[type=checkbox] {
+  transform: scale(1.5);
+
+}
