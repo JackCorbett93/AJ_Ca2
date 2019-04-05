@@ -83,7 +83,11 @@ class TeamCard extends React.Component {
               <DropdownMenu>
                 <DropdownItem>Edit Team</DropdownItem>
                 <DropdownItem>Edit Players</DropdownItem>
-                <DropdownItem>Delete Team</DropdownItem>
+                <Link to={`/deleteTeam/${this.props.id}`}>
+                <DropdownItem>
+                Delete Team
+                </DropdownItem>
+                </Link>
               </DropdownMenu>
             </Dropdown>
             <CardBody style={this.state.flag ? { display: "none" } : {}}>
