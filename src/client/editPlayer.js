@@ -31,7 +31,7 @@ class EditPlayer extends Component {
            last_name: response.data.last_name,
            hometown: response.data.hometown,
            role: response.data.role,
-           current_team__id: this.props.match.params.id,
+           current_team__id: response.data.current_team__id,
            //current_team__id: this.state.current_team__id,
            image_url: response.data.image_url
          });
@@ -79,11 +79,12 @@ class EditPlayer extends Component {
     e.preventDefault();
 
     const newPlayer = {
+      _id: this.props.match.params.id,
       name: this.state.name,
       last_name: this.state.last_name,
       hometown: this.state.hometown,
       role: this.state.role,
-      current_team__id: this.props.match.params.id,
+      current_team__id: this.state.current_team__id,
       //current_team__id: this.state.current_team__id,
       image_url: this.state.image_url
     };
@@ -91,8 +92,10 @@ class EditPlayer extends Component {
     // send a POST request to the server
     // the request includes the state, which is the info. for the new user to be created
     axios
-      .post("/api/Players", newPlayer)
-      .then(res => console.log(res.data)) // if successful go to home
+      .put("/api/Players", newPlayer)
+      .then(res => console.log(res.data),
+      this.props.history.push(`/${this.props.match.params.id}/players`))
+     // if successful go to home
       .catch(error => {
         console.log(error);
       });
@@ -103,7 +106,7 @@ class EditPlayer extends Component {
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
-          <h2>Create New User</h2>
+          <h2>Edit Player</h2>
           <FormGroup>
             <label>
               Current team id:

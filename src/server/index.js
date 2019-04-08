@@ -44,7 +44,6 @@ app.get("/api/Players", function(req, res) {
 app.get("/api/Team", function(req, res) {
   Team.find({}, function(err, data) {
     if (err) throw err;
-
     res.send(data);
   });
 });
@@ -74,66 +73,76 @@ app.get("/api/Players/:id", function(req, res) {
 //    console.log('created in database');
 //    res.redirect('/');
 //  });
-app.post("/api/Players", (req, res) => {
-  console.log("here");
+app.post('/api/Players', (req, res) => {
+  console.log('here');
+  req.body._id = Math.random() * Math.floor(10000);
   const players = new Players(req.body);
+  const tid = req.body.current_team__id;
   players.save((err, result) => {
     if (err) throw err;
-    console.log("created in database");
-    getTeamNumber(players.current_team__id);
-    res.redirect("/");
+    console.log('created in database');
+    getTeamNumber(tid);
+    //res.redirect('/');
   });
 });
 app.post('/api/Team', (req, res) => {
+  req.body._id = Math.random() * Math.floor(10000);
   const team = new Team(req.body);
   team.save((err, result) => {
     if (err) throw err;
-    console.log("created in database");
+    console.log('created in database');
+    res.redirect('/');
+  });
+});
+
+app.put("/api/Team", (req, res) => {
+  // get the ID of the user to be updated
+  const id = req.body._id;
+  // remove the ID so as not to overwrite it when updating
+  delete req.body._id;
+  console.log(req.body._id);
+  // find a user matching this ID and update their details
+  Team.updateOne({ _id: id }, { $set: req.body }, (err, result) => {
+    if (err) throw err;
+    getAllTeamNumber();
+    console.log("updated in database");
+    return res.send({ success: true });
+  });
+});
+
+app.put("/api/Players", (req, res) => {
+  // get the ID of the user to be updated
+  console.log(req.body._id);
+  const id = req.body._id;
+  // remove the ID so as not to overwrite it when updating
+  delete req.body._id;
+
+  // find a user matching this ID and update their details
+  Players.updateOne(
+    { _id: id },
+    { $set: req.body },
+    (err, result) => {
+      if (err) throw err;
+    //  getAllTeamNumber();
+      console.log("updated in database");
+      return res.send({ success: true });
+    }
+  );
+});
+
+app.delete("/api/player", (req, res) => {
+  console.log(req.body.id);
+
+  Players.deleteOne({ _id: req.body.id }, (err, data) => {
+    if (err) return res.send(err);
+    console.log(data.current_team__id);
+    tid = data.current_team__id;
+    getTeamNumber(tid);
+    getAllTeamNumber();
+    console.log("delete in players");
     res.redirect("/");
   });
-});
 
-app.put('/api/Team', (req, res) => {
-  // get the ID of the user to be updated
-  const id  = req.body._id;
-  // remove the ID so as not to overwrite it when updating
-  delete req.body._id;
-  console.log(req.body._id);
-  // find a user matching this ID and update their details
-  Team.updateOne( {_id: id }, {$set: req.body}, (err, result) => {
-    if (err) throw err;
-
-    console.log('updated in database');
-    return res.send({ success: true });
-  });
-});
-
-app.put('/api/Player', (req, res) => {
-  // get the ID of the user to be updated
-  const id  = req.body._id;
-  // remove the ID so as not to overwrite it when updating
-  delete req.body._id;
-  console.log(req.body._id);
-  // find a user matching this ID and update their details
-  Players.updateOne( {_id: new ObjectID(id) }, {$set: req.body}, (err, result) => {
-    if (err) throw err;
-
-    console.log('updated in database');
-    return res.send({ success: true });
-  });
-});
-
-app.delete('/api/player', (req, res) => {
-  console.log(req.body.id);
-  Players.findOne({ _id: req.body.id }, function(err, data) {
-    if (err) return res.send(err);
-    Players.deleteOne({ _id: req.body.id }, function(err, data) {
-      if (err) return res.send(err);
-      getTeamNumber(data.current_team__id);
-      console.log("delete in players");
-      res.redirect("/");
-    });
-  });
 });
 // delete team and players with specific ID from DB
 app.delete("/api/team_player", (req, res) => {

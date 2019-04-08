@@ -76,7 +76,9 @@ class CreatePlayer extends Component {
     // the request includes the state, which is the info. for the new user to be created
     axios
       .post("/api/Players", newPlayer)
-      .then(res => console.log(res.data)) // if successful go to home
+      .then(res =>
+        console.log(res.data),
+        this.props.history.push(`/${this.props.match.params.id}/players`)) // if successful go to home
       .catch(error => {
         console.log(error);
       });

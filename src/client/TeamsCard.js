@@ -56,10 +56,10 @@ class TeamCard extends React.Component {
             <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
               <DropdownToggle caret>Actions</DropdownToggle>
               <DropdownMenu>
-              <LinkContainer to={`${this.props.id}/editTeam`}>
+              <LinkContainer to={`/${this.props.id}/editTeam`}>
                 <DropdownItem>Edit Team</DropdownItem>
                 </LinkContainer>
-                <LinkContainer to={`${this.props.id}/createPlayer/`}>
+                <LinkContainer to={`/${this.props.id}/createPlayer`}>
                   <DropdownItem>Add Players</DropdownItem>
                 </LinkContainer>
                 <DropdownItem

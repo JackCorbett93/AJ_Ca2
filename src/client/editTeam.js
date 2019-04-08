@@ -53,7 +53,8 @@ class EditTeam extends Component {
     // the request includes the state, which is the info. for the new user to be created
     axios
       .put("/api/Team", newTeam)
-      .then(res => console.log(res.data)) // if successful go to home
+      .then(res => console.log(res.data),
+    this.props.history.push(`/${this.props.match.params.id}/players`)) // if successful go to home
       .catch(error => {
         console.log(error);
       });

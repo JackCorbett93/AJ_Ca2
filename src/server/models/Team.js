@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 
 const TeamSchema = mongoose.Schema({
-  _id: { type: mongoose.Schema.Types.String },
+  _id: String,
   name: String,
   image_url: String,
   player_number: Number

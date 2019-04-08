@@ -1,5 +1,16 @@
 import React, { Component } from "react";
-import { Container, Row, Card, CardImg, CardTitle } from "reactstrap";
+import {
+  Container,
+  Row,
+  Card,
+  CardImg,
+  CardTitle,
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem
+} from "reactstrap";
+import { LinkContainer } from "react-router-bootstrap";
 import TeamCard from "./PlayersCard";
 import axios from "axios";
 
@@ -7,31 +18,44 @@ import "./index.css";
 class Team_Play extends Component {
   constructor(props) {
     super(props);
+    this.toggle = this.toggle.bind(this);
     this.state = {
       error: null,
       isLoaded: false,
       Details: [],
       tname: "",
-      timg: ""
+      timg: "",
+      tid: "",
+      dropdownOpen: false
     };
+  }
+  toggle() {
+    this.setState(prevState => ({
+      dropdownOpen: !prevState.dropdownOpen
+    }));
   }
   //api requests players with the team id
   async componentDidMount() {
     //console.log("lol");
-    axios.all([
-      axios.get(`api/${this.props.match.params.id}/Players`),
-      axios.get(`api/Team/${this.props.match.params.id}`),
+    axios
+      .all([
+        axios.get(`api/${this.props.match.params.id}/Players`),
+        axios.get(`api/Team/${this.props.match.params.id}`)
       ])
-      .then(axios.spread((players, team) => {
-        console.log(players.data);
-        this.setState({
-          //sets reponse data to Details
-          isLoaded: true,
-          Details: players.data,
-          tname: team.data.name,
-          timg: team.data.image_url
-        });
-      }))
+      .then(
+        axios.spread((players, team) => {
+          console.log(players.data);
+          console.log(team.data);
+          this.setState({
+            //sets reponse data to Details
+            isLoaded: true,
+            Details: players.data,
+            tid: team.data._id,
+            tname: team.data.name,
+            timg: team.data.image_url
+          });
+        })
+      )
       // Note: it's important to handle errors here
       // instead of a catch() block so that we don't swallow
       // exceptions from actual bugs in components.
@@ -54,7 +78,7 @@ class Team_Play extends Component {
       .then(response => {
         // if delete was successful, re-fetch the list of users, will trigger a re-render
         //this.updateUsers();
-        res.redirect("/");
+        this.props.history.push(`/Teams`)
       })
       .catch(error => {
         console.log(error);
@@ -62,7 +86,7 @@ class Team_Play extends Component {
   }
   render() {
     //sets variable so that if nothing came through on api request it just sets defualt
-    let img, player, timg, tname;
+    let img, player, tname;
     //maps incoming data to variables
     const teamdetails = this.state.Details.map(t => {
       //sees if there is data that comes through players eg if it has zero players then it will show this
@@ -123,6 +147,17 @@ class Team_Play extends Component {
       <Container>
         <Row>
           <Card>
+            <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+              <DropdownToggle caret>Actions</DropdownToggle>
+              <DropdownMenu>
+                <LinkContainer to={`/${this.state.tid}/editTeam`}>
+                  <DropdownItem>Edit Team</DropdownItem>
+                </LinkContainer>
+                <LinkContainer to={`/${this.state.tid}/createPlayer`}>
+                  <DropdownItem>Add Players</DropdownItem>
+                </LinkContainer>
+              </DropdownMenu>
+            </Dropdown>
             <CardTitle className="tname"> {this.state.tname}</CardTitle>
             <div className="timg">
               <CardImg alt="profile" className="timg" src={this.state.timg} />

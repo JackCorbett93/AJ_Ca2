@@ -41,7 +41,8 @@ class CreateTeam extends Component {
     // the request includes the state, which is the info. for the new user to be created
     axios
       .post("/api/Team", newTeam)
-      .then(res => console.log(res.data)) // if successful go to home
+      .then(res => console.log(res.data),
+    this.props.history.push(`/teams`)) // if successful go to home
       .catch(error => {
         console.log(error);
       });

@@ -65,7 +65,7 @@ class App extends Component {
       .then(response => {
         // if delete was successful, re-fetch the list of users, will trigger a re-render
         //this.updateUsers();
-        res.redirect("/");
+        this.props.history.push(`/Teams`)
       })
       .catch(error => {
         console.log(error);
@@ -86,7 +86,7 @@ class App extends Component {
     if (this.state.searchTerm)
       //filters depending on letters in search bar
       filteredTeams = this.state.teams.filter(u =>
-        u.name.startsWith(this.state.searchTerm)
+        u.name.toLowerCase().startsWith(this.state.searchTerm.toLowerCase())
       );
     let img, player;
     //eslint-disable-next-line
