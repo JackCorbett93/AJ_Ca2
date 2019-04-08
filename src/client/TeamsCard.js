@@ -36,17 +36,9 @@ class TeamCard extends React.Component {
   }
 
   render() {
-    // checks to see if any player data is on team object and then pushes it into array so it can show number of players or their name
+
     let player;
     let players = [];
-    // if (this.props.players.length !== 0) {
-    //   for (let i = 0; i < this.props.players.length; i++) {
-    //     player = this.props.players[i].name;
-    //     players.push(player);
-    //   }
-    // } else {
-    //   player = "Not available";
-    // }
 
     if (this.props.players > 0) {
       return (

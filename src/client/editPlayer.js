@@ -27,6 +27,7 @@ class EditPlayer extends Component {
      axios.get('/api/Players/' + this.props.match.params.id)
        .then(response => {
          this.setState({
+           //from api request sets each variable to the same values as whats present on the database
            name: response.data.name,
            last_name: response.data.last_name,
            hometown: response.data.hometown,
@@ -89,8 +90,8 @@ class EditPlayer extends Component {
       image_url: this.state.image_url
     };
     console.log(newPlayer);
-    // send a POST request to the server
-    // the request includes the state, which is the info. for the new user to be created
+    // send a PUT request to the server
+    // the request includes the state, which is the info. for the player to be updated
     axios
       .put("/api/Players", newPlayer)
       .then(res => console.log(res.data),
@@ -105,7 +106,7 @@ class EditPlayer extends Component {
     // note: name of the inputs must match the property names in state
     return (
       <div>
-        <form onSubmit={this.handleSubmit}>
+        <Form onSubmit={this.handleSubmit}>
           <h2>Edit Player</h2>
           <FormGroup>
             <label>
@@ -174,7 +175,7 @@ class EditPlayer extends Component {
             </label>
           </FormGroup>
           <input type="submit" value="Submit" />
-        </form>
+        </Form>
       </div>
     );
   }

@@ -11,7 +11,7 @@ const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
+//Url to connect to Atlas.mongodb
 const mongo_uri =
   "mongodb+srv://Jaaack:FHaQzgJ8FzMUUQ3F@ca2-luszh.mongodb.net/ca2?retryWrites=true";
 //"mongodb://localhost/ca2";
@@ -32,7 +32,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.get("/", function(req, res) {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
-
+//gets all palyers
 app.get("/api/Players", function(req, res) {
   Players.find({}, function(err, data) {
     if (err) throw err;
@@ -40,14 +40,14 @@ app.get("/api/Players", function(req, res) {
     res.send(data);
   });
 });
-
+//gets all teams
 app.get("/api/Team", function(req, res) {
   Team.find({}, function(err, data) {
     if (err) throw err;
     res.send(data);
   });
 });
-
+//gets team from id
 app.get("/api/Team/:id", function(req, res) {
   Team.findOne({ _id: req.params.id }, function(err, data) {
     if (err) throw err;
@@ -55,7 +55,7 @@ app.get("/api/Team/:id", function(req, res) {
     res.send(data);
   });
 });
-
+//gets player from id
 app.get("/api/Players/:id", function(req, res) {
   Players.findOne({ _id: req.params.id }, function(err, data) {
     if (err) throw err;
@@ -73,18 +73,23 @@ app.get("/api/Players/:id", function(req, res) {
 //    console.log('created in database');
 //    res.redirect('/');
 //  });
+//creates player into team
 app.post('/api/Players', (req, res) => {
   console.log('here');
+  //asigns random number to id
   req.body._id = Math.random() * Math.floor(10000);
   const players = new Players(req.body);
+  //saved to variable to make updating the number of players
   const tid = req.body.current_team__id;
   players.save((err, result) => {
     if (err) throw err;
     console.log('created in database');
+    //updates team's number of players
     getTeamNumber(tid);
     //res.redirect('/');
   });
 });
+//creates team
 app.post('/api/Team', (req, res) => {
   req.body._id = Math.random() * Math.floor(10000);
   const team = new Team(req.body);
@@ -94,7 +99,7 @@ app.post('/api/Team', (req, res) => {
     res.redirect('/');
   });
 });
-
+//updates team
 app.put("/api/Team", (req, res) => {
   // get the ID of the user to be updated
   const id = req.body._id;
@@ -109,7 +114,7 @@ app.put("/api/Team", (req, res) => {
     return res.send({ success: true });
   });
 });
-
+//upates players
 app.put("/api/Players", (req, res) => {
   // get the ID of the user to be updated
   console.log(req.body._id);
@@ -129,7 +134,7 @@ app.put("/api/Players", (req, res) => {
     }
   );
 });
-
+//deletes players
 app.delete("/api/player", (req, res) => {
   console.log(req.body.id);
 
@@ -160,7 +165,7 @@ app.delete("/api/team_player", (req, res) => {
     });
   });
 });
-
+//gets all players from team using team id (one to many)
 app.get("/api/:id/Players", function(req, res) {
   //  Team.findOne({_id: req.params.id}, function(err, data) {
   //  if (err) throw err;
@@ -173,6 +178,7 @@ app.get("/api/:id/Players", function(req, res) {
   });
   //});
 });
+//loops through the team counting the number of players and updating the field player number
 function getTeamNumber(teamid) {
   Team.find({ _id: teamid }, function(err, data) {
     data.forEach(t => {

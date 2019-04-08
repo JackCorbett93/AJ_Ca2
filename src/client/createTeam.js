@@ -52,7 +52,7 @@ class CreateTeam extends Component {
     // note: name of the inputs must match the property names in state
     return (
       <div>
-        <form onSubmit={this.handleSubmit}>
+        <Form onSubmit={this.handleSubmit}>
           <h2>Create New Team</h2>
           <FormGroup>
             <label>
@@ -77,7 +77,7 @@ class CreateTeam extends Component {
             </label>
           </FormGroup>
           <input type="submit" value="Submit" />
-        </form>
+        </Form>
       </div>
     );
   }

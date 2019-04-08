@@ -6,6 +6,7 @@ import axios from "axios";
 class CreatePlayer extends Component {
   constructor(props) {
     super(props);
+    //makes a bind so values change when the text box is changed
     this.onChangePlayerName = this.onChangePlayerName.bind(this);
     this.onChangePlayerLName = this.onChangePlayerLName.bind(this);
     this.onChangePlayerHometown = this.onChangePlayerHometown.bind(this);
@@ -61,7 +62,7 @@ class CreatePlayer extends Component {
   }
   handleSubmit(e) {
     e.preventDefault();
-
+    //cretes new player from model
     const newPlayer = {
       name: this.state.name,
       last_name: this.state.last_name,
@@ -78,7 +79,7 @@ class CreatePlayer extends Component {
       .post("/api/Players", newPlayer)
       .then(res =>
         console.log(res.data),
-        this.props.history.push(`/${this.props.match.params.id}/players`)) // if successful go to home
+        this.props.history.push(`/${this.props.match.params.id}/players`)) // if successful go to player view
       .catch(error => {
         console.log(error);
       });
@@ -88,7 +89,7 @@ class CreatePlayer extends Component {
     // note: name of the inputs must match the property names in state
     return (
       <div>
-        <form onSubmit={this.handleSubmit}>
+        <Form onSubmit={this.handleSubmit}>
           <h2>Create New User</h2>
           <FormGroup>
             <label>
@@ -157,7 +158,7 @@ class CreatePlayer extends Component {
             </label>
           </FormGroup>
           <input type="submit" value="Submit" />
-        </form>
+        </Form>
       </div>
     );
   }

@@ -25,7 +25,6 @@ class App extends Component {
   componentDidMount() {
     axios
       .get(`api/Team`)
-      //then it splits up the calls into four variables and then concats it into two groups then into one big group
       .then(response => {
         console.log(response.data);
         this.setState({
@@ -63,9 +62,7 @@ class App extends Component {
         }
       })
       .then(response => {
-        // if delete was successful, re-fetch the list of users, will trigger a re-render
-        //this.updateUsers();
-        this.props.history.push(`/Teams`)
+        this.props.history.push(`/Teams`);
       })
       .catch(error => {
         console.log(error);

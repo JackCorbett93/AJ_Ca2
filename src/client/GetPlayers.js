@@ -39,6 +39,7 @@ class Team_Play extends Component {
     //console.log("lol");
     axios
       .all([
+        //fetches data from both the players of the team as well as the the team so that team cards wont be blank
         axios.get(`api/${this.props.match.params.id}/Players`),
         axios.get(`api/Team/${this.props.match.params.id}`)
       ])
@@ -76,8 +77,6 @@ class Team_Play extends Component {
         }
       })
       .then(response => {
-        // if delete was successful, re-fetch the list of users, will trigger a re-render
-        //this.updateUsers();
         this.props.history.push(`/Teams`)
       })
       .catch(error => {
