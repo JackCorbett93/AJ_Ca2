@@ -12,6 +12,7 @@ import {
   DropdownItem
 } from "reactstrap";
 import { Link } from "react-router-dom";
+import { LinkContainer } from "react-router-bootstrap";
 import "./index.css";
 class TeamCard extends React.Component {
   constructor(props) {
@@ -55,9 +56,19 @@ class TeamCard extends React.Component {
             <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
               <DropdownToggle caret>Actions</DropdownToggle>
               <DropdownMenu>
+              <LinkContainer to={`${this.props.id}/editTeam`}>
                 <DropdownItem>Edit Team</DropdownItem>
-                <DropdownItem>Edit Players</DropdownItem>
-                <DropdownItem>Delete Team</DropdownItem>
+                </LinkContainer>
+                <LinkContainer to={`${this.props.id}/createPlayer/`}>
+                  <DropdownItem>Add Players</DropdownItem>
+                </LinkContainer>
+                <DropdownItem
+                  onClick={() => {
+                    this.props.handleDelete(this.props.id);
+                  }}
+                >
+                  Delete Team & Players
+                </DropdownItem>
               </DropdownMenu>
             </Dropdown>
             <Link to={`${this.props.id}/players/`}>
@@ -81,13 +92,19 @@ class TeamCard extends React.Component {
             <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
               <DropdownToggle caret>Actions</DropdownToggle>
               <DropdownMenu>
+              <LinkContainer to={`${this.props.id}/editTeam`}>
                 <DropdownItem>Edit Team</DropdownItem>
-                <DropdownItem>Edit Players</DropdownItem>
-                <Link to={`/deleteTeam/${this.props.id}`}>
-                <DropdownItem>
-                Delete Team
+                </LinkContainer>
+                <LinkContainer to={`${this.props.id}/createPlayer/`}>
+                  <DropdownItem>Add Players</DropdownItem>
+                </LinkContainer>
+                <DropdownItem
+                  onClick={() => {
+                    this.props.handleDelete(this.props.id);
+                  }}
+                >
+                  Delete Team
                 </DropdownItem>
-                </Link>
               </DropdownMenu>
             </Dropdown>
             <CardBody style={this.state.flag ? { display: "none" } : {}}>

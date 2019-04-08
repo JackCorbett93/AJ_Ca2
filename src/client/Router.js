@@ -1,11 +1,15 @@
 import React, { Component } from "react";
 import { Route, NavLink, HashRouter } from "react-router-dom";
-import './index.css';
+import "./index.css";
 // imports all pages
-import About from './About';
-import Players from './GetPlayers';
-import Teams from './GetTeams';
-import './index.css';
+import About from "./About";
+import Players from "./GetPlayers";
+import Teams from "./GetTeams";
+import CPlayer from "./createPlayer";
+import CTeam from "./createTeam";
+import EPlayer from "./editPlayer";
+import ETeam from "./editTeam";
+import "./index.css";
 class Main extends Component {
   render() {
     return (
@@ -29,7 +33,10 @@ class Main extends Component {
             {/* Attaches pages to the navigation link using component*/}
             <Route exact path="/" component={About} />
             <Route exact path="/Teams" component={Teams} />
-            <Route exact path="/api/DeleteTeam/:id"/>
+            <Route exact path="/:id/createPlayer" component={CPlayer} />
+            <Route exact path="/:id/editPlayer" component={EPlayer} />
+            <Route exact path="/:id/editTeam" component={ETeam} />
+            <Route exact path="/createTeam" component={CTeam} />
             {/*the players page passes id which is attached to the teams page*/}
             <Route path="/:id/players" component={Players} />
           </div>

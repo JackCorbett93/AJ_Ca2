@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import { Container, Row, Col } from "reactstrap";
+import { Container, Row, Col, Button } from "reactstrap";
 import TeamCard from "./TeamsCard";
+import { LinkContainer } from "react-router-bootstrap";
 import axios from "axios";
 import "./index.css";
 //import fire from './fire';
@@ -17,6 +18,7 @@ class App extends Component {
       searchTerm: "",
       alphabetical: "az"
     };
+    this.handleDelete = this.handleDelete.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
   // Makes four api calls due to there being four pages
@@ -52,6 +54,24 @@ class App extends Component {
     });
   }
 
+  handleDelete(teamId) {
+    // make a DELETE request to the server to remove the user with this userId
+    axios
+      .delete("/api/team_player", {
+        data: {
+          id: teamId
+        }
+      })
+      .then(response => {
+        // if delete was successful, re-fetch the list of users, will trigger a re-render
+        //this.updateUsers();
+        res.redirect("/");
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
+
   render() {
     //sorts order of teams shown depending on the drop down menu is on a-z or z-a
     let sortedTeams;
@@ -83,15 +103,15 @@ class App extends Component {
         img = t.image_url;
       }
       //checks to see if any players are present on the team if not gives out message
-       if (
-         t.player_number !== undefined ||
-         t.player_number !== null ||
-         t.player_number > 0
-       ) {
-         player = t.player_number;
-       } else {
-         player = "Not Available";
-       }
+      if (
+        t.player_number !== undefined ||
+        t.player_number !== null ||
+        t.player_number > 0
+      ) {
+        player = t.player_number;
+      } else {
+        player = "Not Available";
+      }
       //checks to see if checkbox is ticked if yes then it will get rid of any team with zero players
       if (this.state.NoPly === false || this.state.NoPly === undefined) {
         return (
@@ -101,27 +121,28 @@ class App extends Component {
             name={t.name}
             players={player}
             image={img}
+            handleDelete={this.handleDelete}
           />
         );
-     }
-      else if (this.state.NoPly === true && t.player_number > 0) {
-         return (
-           <TeamCard
-             key={t._id}
-             id={t._id}
-           name={t.name}
+      } else if (this.state.NoPly === true && t.player_number > 0) {
+        return (
+          <TeamCard
+            key={t._id}
+            id={t._id}
+            name={t.name}
             players={player}
             image={img}
+            handleDelete={this.handleDelete}
           />
-         );
-       }
+        );
+      }
 
       console.log(this.state.NoPly);
     });
     return (
       <Container>
         <Row>
-          <Col>
+          <Col xs="3">
             <form onSubmit={this.handleSubmit}>
               <label>
                 Search for user:
@@ -133,6 +154,12 @@ class App extends Component {
                 />
               </label>
             </form>
+          </Col>
+          <Col xs="3">
+            <label>Create Team</label>
+            <LinkContainer to={`/createTeam`}>
+              <Button />
+            </LinkContainer>
           </Col>
           <Col xs="3">
             <label>Sort:</label>

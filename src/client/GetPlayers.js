@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Container, Row, Card, CardImg, CardTitle } from "reactstrap";
 import TeamCard from "./PlayersCard";
 import axios from "axios";
+
 import "./index.css";
 class Team_Play extends Component {
   constructor(props) {
@@ -9,22 +10,28 @@ class Team_Play extends Component {
     this.state = {
       error: null,
       isLoaded: false,
-      Details: []
+      Details: [],
+      tname: "",
+      timg: ""
     };
   }
   //api requests players with the team id
-  componentDidMount() {
-    console.log("lol");
-    axios
-      .get(`api/${this.props.match.params.id}/Players`)
-      .then(response => {
-        console.log(response.data);
+  async componentDidMount() {
+    //console.log("lol");
+    axios.all([
+      axios.get(`api/${this.props.match.params.id}/Players`),
+      axios.get(`api/Team/${this.props.match.params.id}`),
+      ])
+      .then(axios.spread((players, team) => {
+        console.log(players.data);
         this.setState({
           //sets reponse data to Details
           isLoaded: true,
-          Details: response.data
+          Details: players.data,
+          tname: team.data.name,
+          timg: team.data.image_url
         });
-      })
+      }))
       // Note: it's important to handle errors here
       // instead of a catch() block so that we don't swallow
       // exceptions from actual bugs in components.
@@ -36,7 +43,23 @@ class Team_Play extends Component {
         });
       });
   }
-
+  handleDelete(userId) {
+    // make a DELETE request to the server to remove the user with this userId
+    axios
+      .delete("/api/player", {
+        data: {
+          id: userId
+        }
+      })
+      .then(response => {
+        // if delete was successful, re-fetch the list of users, will trigger a re-render
+        //this.updateUsers();
+        res.redirect("/");
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
   render() {
     //sets variable so that if nothing came through on api request it just sets defualt
     let img, player, timg, tname;
@@ -53,18 +76,20 @@ class Team_Play extends Component {
         tname = t.current_team__name;
       }
       if (
-        t.current_team__image_url === null ||
-        t.current_team__image_url === undefined ||
-        t.current_team__image_url === "null"
+        this.state.timg === null ||
+        this.state.timg === undefined ||
+        this.state.timg === "null"
       ) {
-        timg =
-          "https://via.placeholder.com/500";
+        this.state.timg = "https://via.placeholder.com/500";
       } else {
-        timg = t.current_team__image_url;
+        this.state.timg = this.state.timg;
       }
-      if (t.image_url === null || t.image_url === undefined || t.image_url === "null") {
-        img =
-          "https://via.placeholder.com/500";
+      if (
+        t.image_url === null ||
+        t.image_url === undefined ||
+        t.image_url === "null"
+      ) {
+        img = "https://via.placeholder.com/500";
       } else {
         img = t.image_url;
       }
@@ -82,12 +107,14 @@ class Team_Play extends Component {
       return (
         <TeamCard
           key={t._id}
+          id={t._id}
           name={t.name}
           fname={t.last_name}
           hometown={t.hometown}
           role={t.role}
           players={player}
           image={img}
+          handleDelete={this.handleDelete}
         />
       );
     });
@@ -96,9 +123,9 @@ class Team_Play extends Component {
       <Container>
         <Row>
           <Card>
-            <CardTitle className="tname"> {tname}</CardTitle>
+            <CardTitle className="tname"> {this.state.tname}</CardTitle>
             <div className="timg">
-              <CardImg alt="profile" className="timg" src={timg} />
+              <CardImg alt="profile" className="timg" src={this.state.timg} />
             </div>
             <Container>
               <Row noGutters>{teamdetails}</Row>
